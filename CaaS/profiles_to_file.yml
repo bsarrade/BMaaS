@@ -1,0 +1,14 @@
+---
+# Update standalone servers (IMC) in the file
+- lineinfile:
+    path: "{{ filepath }}"
+    insertafter: "^\\[{{ host_group }}\\]"
+    regexp: "^{{ item.Name }} "
+    # Each line of the inventory has the following:
+    # Name server_moid=<Moid value> model=<Model value> ...
+    line: "{{ item.Name }} profile_moid={{ item.Moid }} associated_server={{ item.AssociatedServer.Moid }}"
+    create: true
+  loop: "{{ outer_item.api_response }}"
+  loop_control:
+    label: "{{ item.Name }}"
+  when: outer_item.api_response is defined and outer_item.api_response

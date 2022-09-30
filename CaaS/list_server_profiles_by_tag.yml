@@ -59,7 +59,7 @@
             path: "{{ filepath }}"
             line: "[{{ host_group }}]"
             create: true
-        - include_tasks: servers_to_file.yml
+        - include_tasks: profiles_to_file.yml
           loop: "{{ servers.results }}"
           loop_control:
             loop_var: outer_item

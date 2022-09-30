@@ -1,0 +1,73 @@
+---
+# Example Playbook: cisco.intersight.intersight_virtual_media_policy
+# Runs on localhost since policies are only configured once
+- hosts: "{{ group }}"
+  connection: local
+  collections:
+    - cisco.intersight
+  gather_facts: false
+  vars:
+    # Create an anchor for api_info that can be used throughout the file
+    api_info: &api_info
+      api_private_key: "{{(lookup('env','api_private_key'))}}"
+      api_key_id: "{{(lookup('env','api_key_id'))}}"
+      api_uri: "{{ api_uri | default(omit) }}"
+    filepath: "{{ inventory_file }}"
+  tasks:
+    - name: Create Virtual Media Policy
+      intersight_virtual_media_policy:
+        <<: *api_info
+        organization: default
+        name: "BMaaS-{{ inventory_hostname }}"
+        description: Virtual Media policy for CaaS iso mount
+        enable: true
+        encryption: true
+        tags:
+          - Key: owner
+            Value: CaaS
+        cdd_virtual_media:
+          mount_type: https
+          volume: CentOS8
+          remote_hostname: "172.20.30.69"
+          remote_path: /
+          remote_file: CentOS-7-x86_64-DVD-2009.iso
+          username: root
+          password: cisco.123
+          mount_options: noauto
+      register: vmedia
+    - debug:
+        msg: "Policy created with MOID: {{ vmedia.api_response.Moid }}"
+    - name: Get Server Profile
+      cisco.intersight.intersight_rest_api:
+        <<: *api_info
+        resource_path: /server/Profiles
+        query_params:
+          $filter: "Moid eq '{{ profile_moid }}'"
+      register: profile
+    - debug:
+        msg: "{{ profile.api_response.PolicyBucket | selectattr('ObjectType', 'eq', 'vmedia.Policy') }}"
+    - name: "Assign vmedia policy to {{ profile.api_response.Name }}"
+      cisco.intersight.intersight_rest_api:
+        resource_path: "/server/Profiles/{{ profile_moid }}/PolicyBucket"
+        list_body:
+          [
+            {
+              "Moid": "{{ vmedia.api_response.Moid }}",
+              "ObjectType": "vmedia.Policy"
+            },
+          ]
+        update_method: post
+    - name: Sleep for 10 seconds and timeout
+      tags: Sleep10
+      wait_for:
+        delay: 10
+        timeout: 0
+    - name: "Deploy Server Profile {{ profile.api_response.Name }}"
+      cisco.intersight.intersight_rest_api:
+        <<: *api_info
+        resource_path: /server/Profiles
+        query_params:
+          $filter: "Moid eq '{{ profile_moid }}'"
+        api_body: {
+          "Action": "{{ action | default('Deploy') }}"
+        }

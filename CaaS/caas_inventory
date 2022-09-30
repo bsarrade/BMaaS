@@ -1,17 +1,9 @@
-[Intersight_HX]
-# Note: at least one host (e.g., sjc07-r13-501) must be present for update_*_inventory.yml to work
-sjc07-r13-501
-sjc07-r13-503
-
-[Intersight_Servers]
-C220-WZP23330PJG server_moid=61f44baf76752d3236dd357f model=UCSC-C220-M5SX
+[caas_hosts]
+test_build_5261803 profile_moid=628ff94e77696e2d33a3e646 associated_server=61fbe13376752d32363a6114
 
 [Intersight:children]
-Intersight_HX
-Intersight_Servers
+caas_hosts
 
 [all:vars]
-#api_private_key=$INTERSIGHT_API_PRIVATE_KEY
-#api_key_id=$INTERSIGHT_API_KEY_ID
-api_private_key=~/Documents/git/Intersight-BMaaS/SecretKey.txt
-api_key_id=6164718d7564612d33e6ed3f/61f7436e7564612d31570c0d/62152b0a7564612d31b86fd2
+api_private_key={{(lookup('env','api_private_key'))}}
+api_key_id={{(lookup('env','api_key_id'))}}

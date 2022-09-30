@@ -6,7 +6,7 @@
     regexp: "^{{ item.Name }} "
     # Each line of the inventory has the following:
     # Name server_moid=<Moid value> model=<Model value> ...
-    line: "{{ item.Name }} profile_moid={{ item.Moid }} associated_server={{ item.AssociatedServer.Moid }}"
+    line: "{{ item.Name }} profile_moid={{ item.Moid }} server_moid={{ item.AssociatedServer.Moid }}"
     create: true
   loop: "{{ outer_item.api_response }}"
   loop_control:

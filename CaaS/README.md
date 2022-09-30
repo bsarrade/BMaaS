@@ -14,7 +14,7 @@ Instructions:
    -  export api_private_key=~/Documents/Intersight/SecretKey.txt
 2. Update the inventory file "caas_inventory" using the "list_server_profiles_by_tag" playbook. This will update the inventory with all assigned Server Profiles in Intersight:
 
-    *NOTE* The inventory file will not update if empty. There is a placeholder '.' as a workaround and this must be removed after initial update.
+    *NOTE* - The inventory file will not update if empty. There is a placeholder '.' as a workaround and this must be removed after initial update.
 
     (example)
 
@@ -29,16 +29,16 @@ Instructions:
     
     ansible-playbook -i caas_inventory create_vmedia_policy.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
     
-    *NOTE* You will need to update the following vars with the correct values:
-          volume,
-          remote_hostname,
-          remote_path,
-          remote_file,
-          username,
-          password,
+    *NOTE* - You will need to update the following vars with the correct values:
+    - volume
+    - remote_hostname
+    - remote_path
+    - remote_file
+    - username
+    - password
 4. Run the "server_actions" playbook to change the desired power state. Options: Policy, PowerOn, PowerOff, PowerCycle, HardReset, Shutdown, Reboot
     
-    *NOTE* Assumption that the current Boot Order policy sets the cimc-mapped-dvd option as first in the boot order. "One Time Boot" option is to be implemented to code in a future release :)
+    *NOTE* - Assumption that the current Boot Order policy sets the cimc-mapped-dvd option as first in the boot order. "One Time Boot" option is to be implemented to code in a future release :)
     
     (example)
     

@@ -22,6 +22,13 @@ Instructions:
     - Deploy the Server Profile to mount the vmedia.
     (example)
     ansible-playbook -i caas_inventory create_vmedia_policy.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
+    *NOTE* You will need to update the following vars with the correct values:
+          volume
+          remote_hostname 
+          remote_path
+          remote_file
+          username
+          password
 4. Run the "server_actions" playbook to change the desired power state. Options: Policy, PowerOn, PowerOff, PowerCycle, HardReset, Shutdown, Reboot
     *NOTE* Assumption that the current Boot Order policy sets the cimc-mapped-dvd option as first in the boot order. "One Time Boot" option is to be implemented to code in a future release :)
     (example)

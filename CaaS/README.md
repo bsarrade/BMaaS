@@ -14,11 +14,11 @@ Instructions:
    -  export api_private_key=~/Documents/Intersight/SecretKey.txt
 2. Update the inventory file "caas_inventory" using the "list_server_profiles_by_tag" playbook. This will update the inventory with all assigned Server Profiles in Intersight:
 
-*NOTE* The inventory file will not update if empty. There is a placeholder '.' as a workaround and this must be removed after initial update.
+    *NOTE* The inventory file will not update if empty. There is a placeholder '.' as a workaround and this must be removed after initial update.
 
-(example)
+    (example)
 
-ansible-playbook -i caas_inventory list_server_profiles_by_tag.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
+    ansible-playbook -i caas_inventory list_server_profiles_by_tag.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
 
 3. Run the "create_vmedia_policy" playbook to:
     - Create a unique vmedia policy for each host listed in the inventory. 

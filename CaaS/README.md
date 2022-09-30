@@ -18,7 +18,7 @@ Instructions:
 
     (example)
 
-    ansible-playbook -i caas_inventory list_server_profiles_by_tag.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
+    ansible-playbook -i caas_inventory list_server_profiles_by_tag.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1 -e validate_certs=false
 
 3. Run the "create_vmedia_policy" playbook to:
     - Create a unique vmedia policy for each host listed in the inventory. 
@@ -27,7 +27,7 @@ Instructions:
     
     (example)
     
-    ansible-playbook -i caas_inventory create_vmedia_policy.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
+    ansible-playbook -i caas_inventory create_vmedia_policy.yml -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1 -e validate_certs=false
     
     *NOTE* - You will need to update the following vars with the correct values:
     - volume
@@ -42,5 +42,5 @@ Instructions:
     
     (example)
     
-    ansible-playbook -i caas_inventory server_actions.yml -e power_state=PowerOn -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1
+    ansible-playbook -i caas_inventory server_actions.yml -e power_state=PowerOn -e group=caas_hosts -e api_uri=https://{FQDN}/api/v1 -e validate_certs=false
 

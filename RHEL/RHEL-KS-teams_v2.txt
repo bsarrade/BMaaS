@@ -1,0 +1,55 @@
+#version=DEVEL
+# System authorization information
+auth --enableshadow --passalgo=sha512
+
+# Use CDROM installation media
+cdrom
+# Use graphical install
+graphical
+# Run the Setup Agent on first boot
+firstboot --enable
+
+# Keyboard layouts
+keyboard --vckeymap=us --xlayouts='us'
+# System language
+lang en_US.UTF-8
+
+DISKIDPLACEHOLDER
+
+autopart --type=lvm
+zerombr
+
+# Network information
+network  --hostname={{ .HostName }}
+
+network --bootproto=dhcp --device=team0 --activate --noipv6 --onboot=on --teamslaves={{ .MAC0 -}},{{- .MAC1 }} --teamconfig='{"runner": {"name": "loadbalance"}}'
+network --bootproto=static --device=team1 --ip={{ .IpAddress }} --netmask={{ .NetMask }} --gateway={{ .Gateway }} --nameserver={{ .NameServer }} --activate --noipv6 --onboot=on --teamslaves={{ .MAC2 -}},{{- .MAC3 }} --teamconfig='{"runner": {"name": "loadbalance"}}'
+
+# Root password
+rootpw {{ .secure.Password }}
+# System services
+services --enabled="chronyd"
+# System timezone
+timezone America/New_York --isUtc --ntpservers={{ .NTPservers }}
+# System bootloader configuration
+
+%packages
+@^minimal-environment
+@standard
+%end
+
+%addon com_redhat_kdump --disable --reserve-mb='auto'
+
+%end
+
+%anaconda
+pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
+pwpolicy luk
+%end
+
+%post --nochroot --log=/root/ks-post.log
+OS_INSTALL_COMPLETED_STATUS_PLACEHOLDER
+%end
+
+reboot

@@ -1,7 +1,6 @@
 [caas_hosts]
 .
 
-
 [Intersight:children]
 caas_hosts
 
